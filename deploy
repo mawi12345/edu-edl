@@ -1,0 +1,2 @@
+#!/bin/bash
+aws --profile windm s3 sync build s3://edu-edl

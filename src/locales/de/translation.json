@@ -1,0 +1,15 @@
+{
+  "heading": "EDL Generator",
+  "feature1": "Alle Schüler einfach von Sokrates importieren",
+  "feature2": "Sätze auswälen und blitzschnell",
+  "feature3": "eine personalisiertes EDL PDF erzeugen",
+  "help": "Einfach einen \"Sokrates Schüler CSV Datei\" hier ablegen oder",
+  "selectFile": "Datei auswählen",
+
+  "error": "Dateiformat nicht unterstützt",
+  "errorInfo": "Leider konnte die Datei nicht gelesen werden. Bitte verwende nur Datein die von Sokrates exportiert wurden.",
+
+  "about": "About",
+  "aboutIntro": "Diese Open-Source Web-Anwendung wird unter der MIT Lizenz entwickelt.",
+  "aboutIntro": "Diese Web-Anwendung ..."
+}
