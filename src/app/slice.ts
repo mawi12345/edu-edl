@@ -43,6 +43,7 @@ const appSlice = createSlice({
     },
     setActive(state, action: PayloadAction<string>) {
       state.active = state.students.find(s => s.id === action.payload);
+      state.selected = [];
     },
     setChapters(state, action: PayloadAction<Chapter[]>) {
       state.chapters = action.payload;

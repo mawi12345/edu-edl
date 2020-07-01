@@ -1,9 +1,9 @@
 {
   "heading": "EDL Generator",
   "feature1": "Alle Schüler einfach von Sokrates importieren",
-  "feature2": "Sätze auswälen und blitzschnell",
-  "feature3": "eine personalisiertes EDL PDF erzeugen",
-  "help": "Einfach einen \"Sokrates Schüler CSV Datei\" hier ablegen oder",
+  "feature2": "Sätze auswählen und blitzschnell",
+  "feature3": "personalisiertes EDL PDF erzeugen",
+  "help": "Einfach eine \"Sokrates Schüler CSV Datei\" hier ablegen oder",
   "selectFile": "Datei auswählen",
 
   "error": "Dateiformat nicht unterstützt",
