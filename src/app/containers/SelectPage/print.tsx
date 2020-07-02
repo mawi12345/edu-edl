@@ -13,7 +13,9 @@ import { DocumentPdf } from 'grommet-icons';
 import { Student, Chapter, Selection } from 'app/types';
 import { saveAs } from 'file-saver';
 import { Button } from 'grommet';
-import { School } from './school';
+import { School } from 'app/school';
+import { format } from 'date-fns';
+import de from 'date-fns/locale/de';
 
 Font.register({
   family: 'Roboto',
@@ -31,6 +33,8 @@ interface DocProps {
   student: Student;
   chapters: Chapter[];
   selected: Selection[];
+  date: string;
+  school: School;
 }
 
 // Create styles
@@ -49,8 +53,8 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   h1: {
-    marginTop: 10,
-    marginBottom: 10,
+    marginTop: 20,
+    marginBottom: 20,
     flexGrow: 0,
     textAlign: 'center',
     fontSize: 20,
@@ -105,6 +109,7 @@ const styles = StyleSheet.create({
   },
   sign: {
     flexDirection: 'row',
+    marginBottom: 20,
   },
   left: {
     flexBasis: 1,
@@ -125,7 +130,13 @@ const styles = StyleSheet.create({
 });
 
 // Create Document Component
-export function StudentDocument({ student, chapters, selected }: DocProps) {
+export function StudentDocument({
+  student,
+  chapters,
+  selected,
+  school,
+  date,
+}: DocProps) {
   const s: string[] = [];
   chapters.forEach((chapter, chapterIndex) =>
     chapter.sentences.forEach((sentence, sentencesIndex) => {
@@ -141,14 +152,23 @@ export function StudentDocument({ student, chapters, selected }: DocProps) {
     }),
   );
 
+  // console.log(date);
+  const d = new Date(date);
+  const year = format(d, 'yyyy');
+  const yearShort = format(d, 'yy');
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        <Image src={School.logo} />
-        <View style={styles.year}>
-          <Text>Schuljahr</Text>
-          <Text>2019/20</Text>
-        </View>
+        {school.logo && <Image src={school.logo} />}
+        {school.logo && (
+          <View style={styles.year}>
+            <Text>Schuljahr</Text>
+            <Text>
+              {`${parseInt(year) - 1}`}/{yearShort}
+            </Text>
+          </View>
+        )}
         <View style={styles.h1}>
           <Text>Ergänzende differenzierende</Text>
           <Text>Leistungsbeschreibung</Text>
@@ -162,8 +182,7 @@ export function StudentDocument({ student, chapters, selected }: DocProps) {
           <Text>
             geboren am {student.Geburtsdatum},{' '}
             {student.Geschlecht === 'm' ? 'Schüler' : 'Schülerin'} der{' '}
-            {student.Klasse} Klasse der Neuen Mittelschule Erzherzog Johann
-            Schladming mit Ski-NMS.
+            {student.Klasse} Klasse der {school.name}.
           </Text>
         </View>
         <View style={styles.intro2}>
@@ -179,7 +198,10 @@ export function StudentDocument({ student, chapters, selected }: DocProps) {
         ))}
         <View style={styles.spacer}></View>
         <View style={styles.date}>
-          <Text>Schladming, am 10. Juli 2020</Text>
+          <Text>
+            {school.city ? `${school.city}, am ` : ''}
+            {format(d, 'd. MMMM yyyy', { locale: de })}
+          </Text>
         </View>
         <View style={styles.mark}>
           <Text>Rundstempel</Text>

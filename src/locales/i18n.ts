@@ -16,7 +16,7 @@ const translationsJson = {
   },
 };
 
-export type TranslationResource = typeof en;
+export type TranslationResource = typeof de;
 export type LanguageKey = keyof TranslationResource;
 
 export const translations: ConvertedToFunctionsType<TranslationResource> = {} as any;
@@ -51,7 +51,7 @@ export const i18n = i18next
     {
       resources: translationsJson,
 
-      fallbackLng: 'en',
+      fallbackLng: 'de',
       debug:
         process.env.NODE_ENV !== 'production' &&
         process.env.NODE_ENV !== 'test',

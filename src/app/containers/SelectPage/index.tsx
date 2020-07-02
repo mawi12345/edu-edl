@@ -10,9 +10,17 @@ import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAppState, gender } from '../../selectors';
 import { actions } from '../../slice';
-import { Box, RadioButtonGroup, CheckBox, Heading } from 'grommet';
+import {
+  Box,
+  RadioButtonGroup,
+  CheckBox,
+  Heading,
+  Calendar,
+  Anchor,
+} from 'grommet';
 import { push } from 'connected-react-router';
 import { Container } from './components';
+import { schools } from 'app/school';
 
 import { StudentPDFDownload } from './print';
 
@@ -43,7 +51,42 @@ export function SelectPage(props: Props) {
         }}
       >
         <Box pad="medium">
-          <Heading level={2}>Schüler</Heading>
+          <Heading level={3}>Schule</Heading>
+          <RadioButtonGroup
+            name="radio"
+            options={schools.map(s => ({
+              label: s.name,
+              value: s.name,
+            }))}
+            value={state.school ? state.school.name : undefined}
+            onChange={event =>
+              dispatch(
+                actions.setSchool(
+                  schools.find(s => s.name === event.target.value)!,
+                ),
+              )
+            }
+          />
+          <Anchor
+            margin={{ top: '20px' }}
+            target={'blank'}
+            href={
+              'https://github.com/mawi12345/edu-edl/issues/new?title=Neue%20Schule%20einf%C3%BCgen&body=Bitte%20f%C3%BCge%20folgende%20neue%20Schule%20ein:'
+            }
+          >
+            Neue Schule beantragen
+          </Anchor>
+        </Box>
+        <Box pad="medium">
+          <Heading level={3}>Zeugnisdatum</Heading>
+          <Calendar
+            date={state.date}
+            onSelect={nextDate => dispatch(actions.setDate(nextDate))}
+            size="small"
+          />
+        </Box>
+        <Box pad="medium">
+          <Heading level={3}>Schüler</Heading>
           <RadioButtonGroup
             name="radio"
             options={state.students.map(s => ({
@@ -52,7 +95,6 @@ export function SelectPage(props: Props) {
             }))}
             value={state.active ? state.active.id : undefined}
             onChange={event => dispatch(actions.setActive(event.target.value))}
-            {...props}
           />
         </Box>
         {state.chapters.map((chapter, chapterIndex) => (
@@ -88,15 +130,19 @@ export function SelectPage(props: Props) {
             ))}
           </Box>
         ))}
-        {state.active && (
-          <Box align={'center'}>
-            <StudentPDFDownload
-              student={state.active}
-              chapters={state.chapters}
-              selected={state.selected}
-            />
-          </Box>
-        )}
+        {state.active &&
+          state.date !== undefined &&
+          state.school !== undefined && (
+            <Box align={'center'}>
+              <StudentPDFDownload
+                school={state.school}
+                date={state.date}
+                student={state.active}
+                chapters={state.chapters}
+                selected={state.selected}
+              />
+            </Box>
+          )}
       </Container>
     </>
   );

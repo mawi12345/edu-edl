@@ -14,6 +14,7 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { ContainerState, Student, Chapter, Selection } from './types';
+import { School } from './school';
 
 // The initial state of the GithubRepoForm container
 export const initialState: ContainerState = {
@@ -40,6 +41,12 @@ const appSlice = createSlice({
       state.loading = false;
       state.students = [];
       state.error = action.payload;
+    },
+    setSchool(state, action: PayloadAction<School>) {
+      state.school = action.payload;
+    },
+    setDate(state, action: PayloadAction<string>) {
+      state.date = action.payload;
     },
     setActive(state, action: PayloadAction<string>) {
       state.active = state.students.find(s => s.id === action.payload);

@@ -1,4 +1,5 @@
 /* --- STATE --- */
+import { School } from './school';
 
 export interface Student {
   id: string;
@@ -25,6 +26,8 @@ export interface AppState {
   students: Student[];
   active?: Student;
   selected: Selection[];
+  school?: School;
+  date?: string;
   loading: boolean;
   error?: string;
 }
