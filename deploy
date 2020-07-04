@@ -1,3 +1,4 @@
 #!/bin/bash
+yarn build
 aws --profile windm s3 sync build s3://edu-edl
 aws --profile windm cloudfront create-invalidation --distribution-id E15ELMNST3724Q --paths "/*"
