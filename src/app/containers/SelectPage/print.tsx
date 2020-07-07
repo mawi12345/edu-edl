@@ -16,6 +16,7 @@ import { Button } from 'grommet';
 import { School } from 'app/school';
 import { format } from 'date-fns';
 import de from 'date-fns/locale/de';
+import { gender } from '../../selectors';
 
 Font.register({
   family: 'Roboto',
@@ -147,7 +148,7 @@ export function StudentDocument({
             s.sentencesIndex === sentencesIndex,
         )
       ) {
-        s.push(sentence);
+        s.push(gender(sentence, student.Geschlecht === 'm'));
       }
     }),
   );
