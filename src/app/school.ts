@@ -18,8 +18,12 @@ export const schools: School[] = [
     name: 'Berufsschule',
   },
   {
-    name: 'Neuen Mittelschule Erzherzog Johann Schladming mit Ski-NMS',
+    name: 'Mittelschule Erzherzog Johann Schladming mit Ski-MS',
     city: 'Schladming',
-    logo: 'schools/nmsejschladming.png',
+    logo: 'schools/msejschladming.png',
+  },
+  {
+    name: 'Mittelschule 1 Schladming',
+    city: 'Schladming',
   },
 ];
