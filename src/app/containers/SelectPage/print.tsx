@@ -30,6 +30,9 @@ Font.register({
   src: 'https://fonts.gstatic.com/s/roboto/v20/KFOlCnqEu92Fr1MmWUlvAw.ttf',
 });
 
+// disable hyphenation
+Font.registerHyphenationCallback(word => [word]);
+
 interface DocProps {
   student: Student;
   chapters: Chapter[];
