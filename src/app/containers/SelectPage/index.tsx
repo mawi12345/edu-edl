@@ -55,14 +55,14 @@ export function SelectPage(props: Props) {
           <RadioButtonGroup
             name="radio"
             options={schools.map(s => ({
-              label: s.name,
-              value: s.name,
+              label: `${s.name}${s.city ? ` (${s.city})` : ''}`,
+              value: s.id,
             }))}
-            value={state.school ? state.school.name : undefined}
+            value={state.school ? state.school.id : undefined}
             onChange={event =>
               dispatch(
                 actions.setSchool(
-                  schools.find(s => s.name === event.target.value)!,
+                  schools.find(s => s.id === event.target.value)!,
                 ),
               )
             }
