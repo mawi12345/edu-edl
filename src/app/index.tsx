@@ -115,7 +115,7 @@ export function App() {
             </Button>
           </Box>
           <Text textAlign="center" size="xsmall">
-            © 2020 Martin Wind
+            © {new Date().getFullYear()} Martin Wind
           </Text>
         </Footer>
         <input {...getInputProps()} />
