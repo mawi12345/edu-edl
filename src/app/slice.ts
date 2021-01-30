@@ -22,6 +22,7 @@ export const initialState: ContainerState = {
   chapters: [],
   selected: [],
   loading: false,
+  printed: false,
 };
 
 const appSlice = createSlice({
@@ -55,6 +56,22 @@ const appSlice = createSlice({
       state.active = state.students.find(s => s.id === action.payload);
       state.selected = [];
       state.customText = undefined;
+      state.printed = false;
+    },
+    printed(state) {
+      state.printed = true;
+    },
+    nextStudent(state) {
+      if (state.active !== undefined && state.active.id) {
+        const nextIndex =
+          (state.students.findIndex(s => s.id === (state as any).active.id) +
+            1) %
+          state.students.length;
+        state.active = state.students[nextIndex];
+      }
+      state.selected = [];
+      state.customText = undefined;
+      state.printed = false;
     },
     setChapters(state, action: PayloadAction<Chapter[]>) {
       state.chapters = action.payload;

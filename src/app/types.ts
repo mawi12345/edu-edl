@@ -31,6 +31,7 @@ export interface AppState {
   loading: boolean;
   error?: string;
   customText?: string;
+  printed: boolean;
 }
 
 /* 

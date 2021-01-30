@@ -40,6 +40,7 @@ interface DocProps {
   date: string;
   school: School;
   customText?: string;
+  onDone: () => void;
 }
 
 // Create styles
@@ -142,7 +143,7 @@ export function StudentDocument({
   school,
   date,
   customText,
-}: DocProps) {
+}: Omit<DocProps, 'onDone'>) {
   const s: string[] = [];
   chapters.forEach((chapter, chapterIndex) =>
     chapter.sentences.forEach((sentence, sentencesIndex) => {
@@ -197,8 +198,8 @@ export function StudentDocument({
             besonders durch folgende Stärken aus:
           </Text>
         </View>
-        {s.map(l => (
-          <View style={styles.content}>
+        {s.map((l, i) => (
+          <View key={i} style={styles.content}>
             <Text>{l}</Text>
           </View>
         ))}
@@ -232,7 +233,7 @@ export function StudentDocument({
   );
 }
 
-export function StudentPDFDownload({ student, ...rest }: DocProps) {
+export function StudentPDFDownload({ student, onDone, ...rest }: DocProps) {
   const onClick = useCallback(() => {
     const instance = pdf(<StudentDocument student={student} {...rest} />);
     instance.toBlob().then(blob => {
@@ -242,8 +243,9 @@ export function StudentPDFDownload({ student, ...rest }: DocProps) {
           student.Vorname
         }.pdf`,
       );
+      onDone();
     });
-  }, [rest, student]);
+  }, [onDone, rest, student]);
 
   return (
     <Button

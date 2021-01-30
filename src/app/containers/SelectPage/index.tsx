@@ -12,6 +12,7 @@ import { selectAppState, gender } from '../../selectors';
 import { actions } from '../../slice';
 import {
   Box,
+  Button,
   RadioButtonGroup,
   CheckBox,
   Heading,
@@ -87,7 +88,9 @@ export function SelectPage(props: Props) {
           />
         </Box>
         <Box pad="medium">
-          <Heading level={3}>Schüler</Heading>
+          <Heading id={'students'} level={3}>
+            Schüler
+          </Heading>
           <RadioButtonGroup
             name="radio"
             options={state.students.map(s => ({
@@ -145,7 +148,7 @@ export function SelectPage(props: Props) {
         {state.active &&
           state.date !== undefined &&
           state.school !== undefined && (
-            <Box align={'center'}>
+            <Box align={'center'} pad="small">
               <StudentPDFDownload
                 school={state.school}
                 date={state.date}
@@ -153,6 +156,26 @@ export function SelectPage(props: Props) {
                 chapters={state.chapters}
                 selected={state.selected}
                 customText={state.customText}
+                onDone={() => dispatch(actions.printed())}
+              />
+            </Box>
+          )}
+        {state.active &&
+          state.printed &&
+          state.date !== undefined &&
+          state.school !== undefined && (
+            <Box align={'center'} pad="small">
+              <Button
+                disabled={
+                  state.students[state.students.length - 1].id ===
+                  state.active.id
+                }
+                secondary
+                onClick={() => {
+                  dispatch(actions.nextStudent());
+                  window.scrollTo(0, window.innerWidth > 768 ? 792 : 647);
+                }}
+                label={'Nächster Schüler'}
               />
             </Box>
           )}
