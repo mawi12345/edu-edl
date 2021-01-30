@@ -39,6 +39,7 @@ interface DocProps {
   selected: Selection[];
   date: string;
   school: School;
+  customText?: string;
 }
 
 // Create styles
@@ -140,6 +141,7 @@ export function StudentDocument({
   selected,
   school,
   date,
+  customText,
 }: DocProps) {
   const s: string[] = [];
   chapters.forEach((chapter, chapterIndex) =>
@@ -200,6 +202,11 @@ export function StudentDocument({
             <Text>{l}</Text>
           </View>
         ))}
+        {customText && (
+          <View style={styles.content}>
+            <Text>{customText}</Text>
+          </View>
+        )}
         <View style={styles.spacer}></View>
         <View style={styles.date}>
           <Text>

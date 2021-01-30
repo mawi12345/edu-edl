@@ -30,6 +30,7 @@ export interface AppState {
   date?: string;
   loading: boolean;
   error?: string;
+  customText?: string;
 }
 
 /* 

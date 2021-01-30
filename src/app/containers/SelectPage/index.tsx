@@ -17,6 +17,7 @@ import {
   Heading,
   Calendar,
   Anchor,
+  TextArea,
 } from 'grommet';
 import { push } from 'connected-react-router';
 import { Container } from './components';
@@ -130,6 +131,17 @@ export function SelectPage(props: Props) {
             ))}
           </Box>
         ))}
+        <Box pad="medium">
+          <Heading level={3}>Individueller Text</Heading>
+          <TextArea
+            rows={8}
+            placeholder="Du bist ..."
+            value={state.customText || ''}
+            onChange={event =>
+              dispatch(actions.setCustomText(event.target.value))
+            }
+          />
+        </Box>
         {state.active &&
           state.date !== undefined &&
           state.school !== undefined && (
@@ -140,6 +152,7 @@ export function SelectPage(props: Props) {
                 student={state.active}
                 chapters={state.chapters}
                 selected={state.selected}
+                customText={state.customText}
               />
             </Box>
           )}

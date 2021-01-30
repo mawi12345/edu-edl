@@ -48,9 +48,13 @@ const appSlice = createSlice({
     setDate(state, action: PayloadAction<string>) {
       state.date = action.payload;
     },
+    setCustomText(state, action: PayloadAction<string>) {
+      state.customText = action.payload === '' ? undefined : action.payload;
+    },
     setActive(state, action: PayloadAction<string>) {
       state.active = state.students.find(s => s.id === action.payload);
       state.selected = [];
+      state.customText = undefined;
     },
     setChapters(state, action: PayloadAction<Chapter[]>) {
       state.chapters = action.payload;
