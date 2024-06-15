@@ -182,7 +182,7 @@ export function SelectPage(props: Props) {
                 </Box>
               ))}
             </Box>
-            <Box pad="small">
+            <Box pad="small" justify="center">
               {text.map((s, i) => <span key={i}>{s}</span>)}
             </Box>
           </Box>
