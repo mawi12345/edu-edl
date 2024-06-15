@@ -39,7 +39,6 @@ export function SelectPage(props: Props) {
   const { t } = translation;
   const dispatch = useAppDispatch();
   const state = useSelector(selectAppState);
-  const text = useSelector(selectText);
 
   return (
     <>
@@ -194,14 +193,26 @@ export function SelectPage(props: Props) {
                         step={1}
                         numberItems={chapter.sentences.length}
                         page={selected.sentencesIndex + 1}
-                        onChange={(e) => dispatch(actions.selectSingle({chapterIndex, sentencesIndex: e.page - 1}))}
+                        onChange={(e) =>
+                          dispatch(
+                            actions.selectSingle({
+                              chapterIndex,
+                              sentencesIndex: e.page - 1,
+                            })
+                          )
+                        }
                       />
                     )}
                   </Box>
                   <Box pad={{ vertical: "xsmall" }} width="large">
                     {state.selected
                       .filter((s) => s.chapterIndex === chapterIndex)
-                      .map((s) => chapter.sentences[s.sentencesIndex])
+                      .map((s) =>
+                        gender(
+                          chapter.sentences[s.sentencesIndex],
+                          state.active ? state.active.Geschlecht === "m" : false
+                        )
+                      )
                       .join(" ")}
                   </Box>
                 </Box>
