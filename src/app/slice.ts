@@ -1,22 +1,8 @@
-/*
- * App Slice
- *
- * Here we define:
- * - The shape of our container's slice of Redux store,
- * - All the actions which can be triggered for this slice, including their effects on the store.
- *
- * Note that, while we are using dot notation in our reducer, we are not actually mutating the state
- * manually. Under the hood, we use immer to apply these updates to a new copy of the state.
- * Please see https://immerjs.github.io/immer/docs/introduction for more information.
- *
- */
+import { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import { ContainerState, Student, Chapter, Selection } from "./types";
+import { School } from "./school";
 
-import { PayloadAction } from '@reduxjs/toolkit';
-import { createSlice } from 'utils/@reduxjs/toolkit';
-import { ContainerState, Student, Chapter, Selection } from './types';
-import { School } from './school';
-
-// The initial state of the GithubRepoForm container
 export const initialState: ContainerState = {
   students: [],
   chapters: [],
@@ -26,7 +12,7 @@ export const initialState: ContainerState = {
 };
 
 const appSlice = createSlice({
-  name: 'app',
+  name: "app",
   initialState,
   reducers: {
     readBlob(state, action: PayloadAction<Blob>) {
@@ -50,10 +36,10 @@ const appSlice = createSlice({
       state.date = action.payload;
     },
     setCustomText(state, action: PayloadAction<string>) {
-      state.customText = action.payload === '' ? undefined : action.payload;
+      state.customText = action.payload === "" ? undefined : action.payload;
     },
     setActive(state, action: PayloadAction<string>) {
-      state.active = state.students.find(s => s.id === action.payload);
+      state.active = state.students.find((s) => s.id === action.payload);
       state.selected = [];
       state.customText = undefined;
       state.printed = false;
@@ -64,8 +50,7 @@ const appSlice = createSlice({
     nextStudent(state) {
       if (state.active !== undefined && state.active.id) {
         const nextIndex =
-          (state.students.findIndex(s => s.id === (state as any).active.id) +
-            1) %
+          (state.students.findIndex((s) => s.id === state.active!.id) + 1) %
           state.students.length;
         state.active = state.students[nextIndex];
       }
@@ -79,9 +64,9 @@ const appSlice = createSlice({
     select(state, action: PayloadAction<Selection>) {
       if (
         !state.selected.find(
-          s =>
+          (s) =>
             s.chapterIndex === action.payload.chapterIndex &&
-            s.sentencesIndex === action.payload.sentencesIndex,
+            s.sentencesIndex === action.payload.sentencesIndex
         )
       ) {
         state.selected.push(action.payload);
