@@ -1,5 +1,5 @@
 /* --- STATE --- */
-import { School } from './school';
+import { School } from "./school";
 
 export interface Student {
   id: string;
@@ -32,6 +32,7 @@ export interface AppState {
   error?: string;
   customText?: string;
   printed: boolean;
+  mode?: "quick" | "custom";
 }
 
 /* 

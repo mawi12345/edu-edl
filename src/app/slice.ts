@@ -1,6 +1,6 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
-import { ContainerState, Student, Chapter, Selection } from "./types";
+import { ContainerState, Student, Chapter, Selection, AppState } from "./types";
 import { School } from "./school";
 
 export const initialState: ContainerState = {
@@ -28,6 +28,9 @@ const appSlice = createSlice({
       state.loading = false;
       state.students = [];
       state.error = action.payload;
+    },
+    setMode(state, action: PayloadAction<AppState["mode"]>) {
+      state.mode = action.payload;
     },
     setSchool(state, action: PayloadAction<School>) {
       state.school = action.payload;
@@ -82,6 +85,19 @@ const appSlice = createSlice({
           break;
         }
       }
+    },
+    selectChapter(state, action: PayloadAction<number>) {
+      const chapter = state.chapters[action.payload];
+      const random = Math.floor(Math.random() * chapter.sentences.length);
+      state.selected.push({
+        chapterIndex: action.payload,
+        sentencesIndex: random,
+      });
+    },
+    unselectChapter(state, action: PayloadAction<number>) {
+      state.selected = state.selected.filter(
+        (s) => s.chapterIndex !== action.payload
+      );
     },
   },
 });
