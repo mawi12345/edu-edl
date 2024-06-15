@@ -10,12 +10,12 @@ import {
   Image,
 } from '@react-pdf/renderer';
 import { DocumentPdf } from 'grommet-icons';
-import { Student, Chapter, Selection } from '../types';
+import { Student, Chapter, Selection } from './types';
 import { saveAs } from 'file-saver';
 import { Button } from 'grommet';
-import { School } from '../school';
+import { School } from './school';
 import { format } from 'date-fns';
-import { gender } from '../selectors';
+import { gender } from './selectors';
 
 Font.register({
   family: 'Roboto',
