@@ -99,6 +99,20 @@ const appSlice = createSlice({
         (s) => s.chapterIndex !== action.payload
       );
     },
+    selectSingle(state, action: PayloadAction<Selection>) {
+      state.selected = state.selected.filter(
+        (s) => s.chapterIndex !== action.payload.chapterIndex
+      );
+      if (
+        !state.selected.find(
+          (s) =>
+            s.chapterIndex === action.payload.chapterIndex &&
+            s.sentencesIndex === action.payload.sentencesIndex
+        )
+      ) {
+        state.selected.push(action.payload);
+      }
+    },
   },
 });
 

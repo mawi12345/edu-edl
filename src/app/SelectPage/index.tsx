@@ -19,6 +19,7 @@ import {
   Calendar,
   Anchor,
   TextArea,
+  Pagination,
 } from "grommet";
 import { schools } from "../school";
 import { StudentPDFDownload } from "../print";
@@ -38,7 +39,6 @@ export function SelectPage(props: Props) {
   const { t } = translation;
   const dispatch = useAppDispatch();
   const state = useSelector(selectAppState);
-  const text = useSelector(selectText);
 
   return (
     <>
@@ -157,34 +157,67 @@ export function SelectPage(props: Props) {
           </>
         )}
         {state.mode === "quick" && (
-          <Box direction="row">
-            <Box pad={{ horizontal: "medium" }}>
-              {state.chapters.map((chapter, chapterIndex) => (
-                <Box key={chapterIndex} pad={{ vertical: "xsmall" }}>
-                  <CheckBox
-                    label={gender(
-                      chapter.name,
-                      state.active ? state.active.Geschlecht === "m" : false
+          <Box pad={{ horizontal: "medium" }}>
+            {state.chapters.map((chapter, chapterIndex) => {
+              const selected = state.selected.find(
+                (s) => s.chapterIndex === chapterIndex
+              );
+              return (
+                <Box direction="row">
+                  <Box
+                    key={chapterIndex}
+                    pad={{ vertical: "xsmall" }}
+                    width="medium"
+                    justify="center"
+                  >
+                    <CheckBox
+                      label={gender(
+                        chapter.name,
+                        state.active ? state.active.Geschlecht === "m" : false
+                      )}
+                      checked={selected !== undefined}
+                      onChange={(event) => {
+                        if (event.target.checked) {
+                          dispatch(actions.selectChapter(chapterIndex));
+                        } else {
+                          dispatch(actions.unselectChapter(chapterIndex));
+                        }
+                      }}
+                    />
+                  </Box>
+                  <Box width="medium" justify="center">
+                    {selected && (
+                      <Pagination
+                        size="small"
+                        numberEdgePages={0}
+                        step={1}
+                        numberItems={chapter.sentences.length}
+                        page={selected.sentencesIndex + 1}
+                        onChange={(e) =>
+                          dispatch(
+                            actions.selectSingle({
+                              chapterIndex,
+                              sentencesIndex: e.page - 1,
+                            })
+                          )
+                        }
+                      />
                     )}
-                    checked={
-                      state.selected.find(
-                        (s) => s.chapterIndex === chapterIndex
-                      ) !== undefined
-                    }
-                    onChange={(event) => {
-                      if (event.target.checked) {
-                        dispatch(actions.selectChapter(chapterIndex));
-                      } else {
-                        dispatch(actions.unselectChapter(chapterIndex));
-                      }
-                    }}
-                  />
+                  </Box>
+                  <Box pad={{ vertical: "xsmall" }} width="large">
+                    {state.selected
+                      .filter((s) => s.chapterIndex === chapterIndex)
+                      .map((s) =>
+                        gender(
+                          chapter.sentences[s.sentencesIndex],
+                          state.active ? state.active.Geschlecht === "m" : false
+                        )
+                      )
+                      .join(" ")}
+                  </Box>
                 </Box>
-              ))}
-            </Box>
-            <Box pad="small">
-              {text.map((s, i) => <span key={i}>{s}</span>)}
-            </Box>
+              );
+            })}
           </Box>
         )}
         <Box pad="medium">
