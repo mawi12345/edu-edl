@@ -1,30 +1,18 @@
-/**
- *
- * App
- *
- * This component is the skeleton around the actual pages, and should only
- * contain code that should be seen on all pages. (e.g. navigation bar)
- */
-
-import * as React from 'react';
+import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Switch, Route } from 'react-router-dom';
-import { push } from 'connected-react-router';
-import { GlobalStyle } from 'styles/global-styles';
+import { GlobalStyle } from '../styles/global-styles';
 import { useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
-import { HomePage } from './containers/HomePage/Loadable';
-import { AboutPage } from './containers/AboutPage/Loadable';
-import { ErrorPage } from './components/ErrorPage/Loadable';
-import { SelectPage } from './containers/SelectPage/Loadable';
-import { NotFoundPage } from './components/NotFoundPage/Loadable';
+import { HomePage } from './HomePage';
+import { ErrorPage } from './ErrorPage';
+import { SelectPage } from './SelectPage';
 import { Box, Footer, Main, Text, Button } from 'grommet';
 import { Github, DocumentText } from 'grommet-icons';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
-import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
-import { sliceKey, reducer, actions } from './slice';
-import { appSaga } from './saga';
+import { useSelector } from 'react-redux';
+import { actions } from './slice';
+import { selectRoute } from './selectors';
+import { useAppDispatch } from '../store';
 
 const DropTarget = styled.div`
   display: flex;
@@ -34,14 +22,12 @@ const DropTarget = styled.div`
 
 export function App() {
   const { t } = useTranslation();
-  useInjectReducer({ key: sliceKey, reducer: reducer });
-  const dispatch = useDispatch();
-  useInjectSaga({ key: sliceKey, saga: appSaga });
+  const dispatch = useAppDispatch();
 
   const onDrop = React.useCallback(
-    acceptedFiles => {
+    (acceptedFiles: Blob[]) => {
       const [file] = acceptedFiles;
-      dispatch(actions.readBlob(file as Blob));
+      dispatch(actions.readBlob(file));
     },
     [dispatch],
   );
@@ -49,6 +35,8 @@ export function App() {
     onDrop,
     multiple: false,
   });
+
+  const route = useSelector(selectRoute);
 
   return (
     <>
@@ -64,13 +52,10 @@ export function App() {
           elevation="large"
           gap="large"
         >
-          <Switch>
-            <Route exact path="/" component={HomePage} />
-            <Route exact path="/error" component={ErrorPage} />
-            <Route exact path="/select" component={SelectPage} />
-            <Route exact path="/about" component={AboutPage} />
-            <Route component={NotFoundPage} />
-          </Switch>
+          {route === 'home' && <HomePage />}
+          {route === 'select' && <SelectPage />}
+          {route === 'error' && <ErrorPage />}
+
         </Main>
         <Footer
           background="light-3"
@@ -83,7 +68,6 @@ export function App() {
             align="center"
             direction="row"
             gap="xsmall"
-            onClick={() => dispatch(push('/'))}
           >
             <DocumentText color="brand" size="medium" />
             <Text alignSelf="center" color="brand" size="small">
@@ -91,17 +75,6 @@ export function App() {
             </Text>
           </Box>
           <Box direction="row" gap="xxsmall" justify="center">
-            {/*
-            <Button
-              hoverIndicator="light-1"
-              onClick={() => dispatch(push('/about'))}
-            >
-              <Box pad="small" direction="row" align="center" gap="small">
-                <Info />
-                <Text size="small">{t('about')}</Text>
-              </Box>
-            </Button>
-            */}
             <Button
               hoverIndicator="light-1"
               onClick={() =>
