@@ -21,7 +21,7 @@ export function csvBlobToStudents(file: Blob): Promise<Student[]> {
       parser.write(reader.result);
       parser.end();
     };
-    reader.readAsText(file);
+    reader.readAsText(file, "iso-8859-2");
   });
 }
 
