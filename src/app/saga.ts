@@ -8,13 +8,15 @@ import { Chapter } from "./types";
 export function* readBlob(action: PayloadAction<Blob>): any {
   const file = action.payload;
   const students = yield call(csvBlobToStudents, file);
-  if (!isFileSupported(students)) {
-    yield put(actions.fileParsedError("File is not supported"));
-  } else {
-    try {
-      yield put(actions.fileParsedSuccess(students));
-    } catch (e: any) {
-      yield put(actions.fileParsedError(e.message));
+  if (students.length > 0) {
+    if (!isFileSupported(students)) {
+      yield put(actions.fileParsedError("File is not supported"));
+    } else {
+      try {
+        yield put(actions.fileParsedSuccess(students));
+      } catch (e: any) {
+        yield put(actions.fileParsedError(e.message));
+      }
     }
   }
 }
