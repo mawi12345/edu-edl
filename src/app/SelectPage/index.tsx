@@ -51,7 +51,11 @@ export function SelectPage({ openFileDialog }: SelectProps) {
           </Heading>
         </Box>
         <Box direction="row" align="center" pad={{ horizontal: "medium" }}>
-          <Button secondary label={t("selectDifferentFile")} onClick={openFileDialog} />
+          <Button
+            secondary
+            label={t("selectDifferentFile")}
+            onClick={openFileDialog}
+          />
         </Box>
       </Header>
       <Container>
@@ -115,24 +119,29 @@ export function SelectPage({ openFileDialog }: SelectProps) {
             />
           </Box>
           <Box pad="medium">
-            {state.active && (
-              <>
-                <Heading id={"gender"} level={3}>
-                  Geschlecht
-                </Heading>
-                <RadioButtonGroup
-                  name="radio"
-                  options={[
-                    { value: "w", label: "weiblich" },
-                    { value: "m", label: "männlich" },
-                  ]}
-                  value={state.active.Geschlecht}
-                  onChange={(event) =>
-                    dispatch(actions.setActiveGender(event.target.value as any))
-                  }
-                />
-              </>
-            )}
+            {state.active &&
+              state.students.length > 0 &&
+              state.students[0].Geschlecht !== "m" &&
+              state.students[0].Geschlecht !== "w" && (
+                <>
+                  <Heading id={"gender"} level={3}>
+                    Geschlecht
+                  </Heading>
+                  <RadioButtonGroup
+                    name="radio"
+                    options={[
+                      { value: "w", label: "weiblich" },
+                      { value: "m", label: "männlich" },
+                    ]}
+                    value={state.active.Geschlecht}
+                    onChange={(event) =>
+                      dispatch(
+                        actions.setActiveGender(event.target.value as any)
+                      )
+                    }
+                  />
+                </>
+              )}
             <Heading id={"mode"} level={3}>
               Bearbeitungsmodus
             </Heading>
