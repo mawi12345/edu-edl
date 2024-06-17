@@ -31,9 +31,10 @@ export function App() {
     },
     [dispatch],
   );
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     onDrop,
     multiple: false,
+    noClick: true,
   });
 
   const route = useSelector(selectRoute);
@@ -52,17 +53,14 @@ export function App() {
           elevation="large"
           gap="large"
         >
-          {route === 'home' && <HomePage />}
-          {route === 'select' && <SelectPage />}
-          {route === 'error' && <ErrorPage />}
+          {route === 'home' && <HomePage openFileDialog={open} />}
+          {route === 'select' && <SelectPage openFileDialog={open} />}
+          {route === 'error' && <ErrorPage openFileDialog={open} />}
 
         </Main>
         <Footer
           background="light-3"
           pad="small"
-          onClick={e => {
-            e.stopPropagation();
-          }}
         >
           <Box
             align="center"

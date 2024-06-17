@@ -9,6 +9,7 @@ export const initialState: ContainerState = {
   selected: [],
   loading: false,
   printed: false,
+  mode: "quick",
 };
 
 const appSlice = createSlice({
@@ -46,6 +47,11 @@ const appSlice = createSlice({
       state.selected = [];
       state.customText = undefined;
       state.printed = false;
+    },
+    setActiveGender(state, action: PayloadAction<"m" | "w">) {
+      if (state.active) {
+        state.active.Geschlecht = action.payload;
+      }
     },
     printed(state) {
       state.printed = true;

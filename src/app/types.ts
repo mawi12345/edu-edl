@@ -32,7 +32,7 @@ export interface AppState {
   error?: string;
   customText?: string;
   printed: boolean;
-  mode?: "quick" | "custom";
+  mode: "quick" | "custom";
 }
 
 /* 

@@ -1,15 +1,10 @@
-/**
- *
- * SelectPage
- *
- */
-
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
-import { selectAppState, gender, selectText } from "../selectors";
+import { selectAppState, gender } from "../selectors";
 import { actions } from "../slice";
+import { DocumentText } from "grommet-icons";
 import {
   Box,
   Button,
@@ -20,6 +15,7 @@ import {
   Anchor,
   TextArea,
   Pagination,
+  Header,
 } from "grommet";
 import { schools } from "../school";
 import { StudentPDFDownload } from "../print";
@@ -32,9 +28,11 @@ export const Container = styled.div`
   margin-bottom: 22px;
 `;
 
-interface Props {}
+interface SelectProps {
+  openFileDialog: () => void;
+}
 
-export function SelectPage(props: Props) {
+export function SelectPage({ openFileDialog }: SelectProps) {
   const translation = useTranslation();
   const { t } = translation;
   const dispatch = useAppDispatch();
@@ -45,79 +43,111 @@ export function SelectPage(props: Props) {
       <Helmet>
         <title>{t("heading")}</title>
       </Helmet>
-      <Container
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-      >
-        <Box pad="medium">
-          <Heading level={3}>Schule</Heading>
-          <RadioButtonGroup
-            name="radio"
-            options={schools.map((s) => ({
-              label: `${s.name}${s.city ? ` (${s.city})` : ""}`,
-              value: s.id,
-            }))}
-            value={state.school ? state.school.id : undefined}
-            onChange={(event) =>
-              dispatch(
-                actions.setSchool(
-                  schools.find((s) => s.id === event.target.value)!
+      <Header background="brand">
+        <Box direction="row" align="center" pad={{ horizontal: "medium" }}>
+          <DocumentText size="large" />
+          <Heading level={2} margin={"medium"}>
+            {t("heading")}
+          </Heading>
+        </Box>
+        <Box direction="row" align="center" pad={{ horizontal: "medium" }}>
+          <Button secondary label={t("selectDifferentFile")} onClick={openFileDialog} />
+        </Box>
+      </Header>
+      <Container>
+        <Box direction="row" wrap>
+          <Box pad="medium" width="large">
+            <Heading level={3}>Schule</Heading>
+            <RadioButtonGroup
+              name="radio"
+              options={schools.map((s) => ({
+                label: `${s.name}${s.city ? ` (${s.city})` : ""}`,
+                value: s.id,
+              }))}
+              value={state.school ? state.school.id : undefined}
+              onChange={(event) =>
+                dispatch(
+                  actions.setSchool(
+                    schools.find((s) => s.id === event.target.value)!
+                  )
                 )
-              )
-            }
-          />
-          <Anchor
-            margin={{ top: "20px" }}
-            target={"blank"}
-            href={
-              "https://github.com/mawi12345/edu-edl/issues/new?title=Neue%20Schule%20einf%C3%BCgen&body=Bitte%20f%C3%BCge%20folgende%20neue%20Schule%20ein:"
-            }
-          >
-            Neue Schule beantragen
-          </Anchor>
+              }
+            />
+            <Anchor
+              margin={{ top: "20px" }}
+              target={"blank"}
+              href={
+                "https://github.com/mawi12345/edu-edl/issues/new?title=Neue%20Schule%20einf%C3%BCgen&body=Bitte%20f%C3%BCge%20folgende%20neue%20Schule%20ein:"
+              }
+            >
+              Neue Schule beantragen
+            </Anchor>
+          </Box>
+          <Box pad="medium">
+            <Heading level={3}>Zeugnisdatum</Heading>
+            <Calendar
+              firstDayOfWeek={1}
+              daysOfWeek
+              locale="de"
+              date={state.date}
+              onSelect={(nextDate) =>
+                dispatch(actions.setDate(nextDate as string))
+              }
+              size="small"
+            />
+          </Box>
         </Box>
-        <Box pad="medium">
-          <Heading level={3}>Zeugnisdatum</Heading>
-          <Calendar
-            date={state.date}
-            onSelect={(nextDate) =>
-              dispatch(actions.setDate(nextDate as string))
-            }
-            size="small"
-          />
-        </Box>
-        <Box pad="medium">
-          <Heading id={"students"} level={3}>
-            Schüler
-          </Heading>
-          <RadioButtonGroup
-            name="radio"
-            options={state.students.map((s) => ({
-              label: `${s.Familienname} ${s.Vorname}`,
-              value: s.id,
-            }))}
-            value={state.active ? state.active.id : undefined}
-            onChange={(event) =>
-              dispatch(actions.setActive(event.target.value))
-            }
-          />
-        </Box>
-        <Box pad="medium">
-          <Heading id={"students"} level={3}>
-            Modus
-          </Heading>
-          <RadioButtonGroup
-            name="radio"
-            options={[
-              { value: "quick", label: "Schnell" },
-              { value: "custom", label: "Individuell" },
-            ]}
-            value={state.mode}
-            onChange={(event) =>
-              dispatch(actions.setMode(event.target.value as any))
-            }
-          />
+        <Box direction="row" wrap>
+          <Box pad="medium" width="large">
+            <Heading id={"students"} level={3}>
+              Schüler
+            </Heading>
+            <RadioButtonGroup
+              name="radio"
+              options={state.students.map((s) => ({
+                label: `${s.Familienname} ${s.Vorname}`,
+                value: s.id,
+              }))}
+              value={state.active ? state.active.id : undefined}
+              onChange={(event) =>
+                dispatch(actions.setActive(event.target.value))
+              }
+            />
+          </Box>
+          <Box pad="medium">
+            {state.active && (
+              <>
+                <Heading id={"gender"} level={3}>
+                  Geschlecht
+                </Heading>
+                <RadioButtonGroup
+                  name="radio"
+                  options={[
+                    { value: "w", label: "weiblich" },
+                    { value: "m", label: "männlich" },
+                  ]}
+                  value={state.active.Geschlecht}
+                  onChange={(event) =>
+                    dispatch(actions.setActiveGender(event.target.value as any))
+                  }
+                />
+              </>
+            )}
+            <Heading id={"mode"} level={3}>
+              Bearbeitungsmodus
+            </Heading>
+            <RadioButtonGroup
+              name="radio"
+              options={[
+                { value: "quick", label: "Schnell" },
+                { value: "custom", label: "Individuell" },
+              ]}
+              value={state.mode}
+              onChange={(event) =>
+                dispatch(actions.setMode(event.target.value as any))
+              }
+            />
+          </Box>
         </Box>
         {state.mode === "custom" && (
           <>
@@ -158,6 +188,9 @@ export function SelectPage(props: Props) {
         )}
         {state.mode === "quick" && (
           <Box pad={{ horizontal: "medium" }}>
+            <Heading id={"students"} level={3}>
+              Positive Eigenschaften
+            </Heading>
             {state.chapters.map((chapter, chapterIndex) => {
               const selected = state.selected.find(
                 (s) => s.chapterIndex === chapterIndex
@@ -224,7 +257,7 @@ export function SelectPage(props: Props) {
           <Heading level={3}>Individueller Text</Heading>
           <TextArea
             rows={8}
-            placeholder="Du bist ..."
+            placeholder="Deine Fähigkeit, Grenzen zu testen, weist auf ein starkes Gefühl für eigene Unabhängigkeit hin."
             value={state.customText || ""}
             onChange={(event) =>
               dispatch(actions.setCustomText(event.target.value))

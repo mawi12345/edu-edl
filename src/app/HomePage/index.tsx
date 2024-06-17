@@ -1,28 +1,38 @@
-import React from 'react';
-import { Helmet } from 'react-helmet-async';
-import { Box, Text, Heading, List, Button } from 'grommet';
-import { useTranslation } from 'react-i18next';
+import React from "react";
+import { Helmet } from "react-helmet-async";
+import { Box, Text, Heading, List, Button } from "grommet";
+import { useTranslation } from "react-i18next";
 
-export function HomePage() {
+interface HomeProps {
+  openFileDialog: () => void;
+}
+
+export function HomePage({ openFileDialog }: HomeProps) {
   const { t } = useTranslation();
   return (
     <>
       <Helmet>
-        <title>{t('heading')}</title>
-        <meta name="description" content={t('intro')} />
+        <title>{t("heading")}</title>
+        <meta name="description" content={t("intro")} />
       </Helmet>
-      <Box flex justify="center" align="center" background="brand" fill>
-        <Heading>{t('heading')}</Heading>
+      <Box
+        flex
+        justify="center"
+        align="center"
+        background="brand"
+        fill
+      >
+        <Heading>{t("heading")}</Heading>
         <Box align="center" pad="large">
           <List
-            style={{ textAlign: 'center' }}
-            data={[t('feature1'), t('feature2'), t('feature3')]}
+            style={{ textAlign: "center" }}
+            data={[t("feature1"), t("feature2"), t("feature3")]}
           />
         </Box>
         <Text margin="small" size="medium">
-          {t('help')}
+          {t("help")}
         </Text>
-        <Button label={t('selectFile')} />
+        <Button label={t("selectFile")} onClick={openFileDialog} />
       </Box>
     </>
   );
