@@ -16,6 +16,7 @@ import { Button } from 'grommet';
 import { School } from './school';
 import { format } from 'date-fns';
 import { gender } from './selectors';
+import { de } from 'date-fns/locale'
 
 Font.register({
   family: 'Roboto',
@@ -160,8 +161,8 @@ export function StudentDocument({
 
   // console.log(date);
   const d = new Date(date);
-  const year = format(d, 'yyyy');
-  const yearShort = format(d, 'yy');
+  const year = format(d, 'yyyy', { locale: de });
+  const yearShort = format(d, 'yy', { locale: de });
 
   return (
     <Document>
@@ -211,7 +212,7 @@ export function StudentDocument({
         <View style={styles.date}>
           <Text>
             {school.city ? `${school.city}, am ` : ''}
-            {format(d, 'd. MMMM yyyy')}
+            {format(d, 'd. MMMM yyyy', { locale: de })}
           </Text>
         </View>
         <View style={styles.mark}>
